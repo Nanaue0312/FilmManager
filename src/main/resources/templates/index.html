@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/commons :: commonhead">
+</head>
+<style>
+    h4 {
+        width: inherit;
+        /*text-align: left;*/
+        font-size: calc(1.275rem + .3vw);
+        top: 70%;
+        left: 0;
+        color: #f8f9fa;
+        position: absolute; /*设为绝对定位*/
+    }
+
+    .f14 {
+        font-size: 0.875rem;
+        top: 75%;
+        left: 0;
+        padding-top: 0.30rem !important;
+        position: absolute; /*设为绝对定位*/
+        color: #f8f9fa;
+    }
+
+    .f12 {
+        font-size: 0.75rem;
+        top: 80%;
+        left: 0;
+        position: absolute; /*设为绝对定位*/
+        color: #f8f9fa;
+        padding-top: 0.25rem !important;
+        width: 50% !important;
+    }
+</style>
+<body>
+<!--<body>-->
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="commons/commons :: .layui-header"></div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">电影信息管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/film/film_info/1}">电影列表</a></dd>
+                        <dd><a th:href="@{/film/toAddFilm}">新增电影</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">新闻管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/news/news_info/1}">新闻列表</a></dd>
+                        <dd><a th:href="@{/news/toAddNews}">新增新闻</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/user/toUpdate}">个人信息修改</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <div class="layui-carousel" id="test1">
+            <div carousel-item>
+                <div>
+                    <img th:src="@{/images/alice-in-borderland.jpg}">
+                    <div>
+                        <h4>彌留之國的愛麗絲 Alice in Borderland</h4>
+                        <div class="f14">動作 科幻 懸疑 驚悚 奇幻</div>
+                        <div class="w-50 f12 pt-1">
+                            在一道詭異的閃光之後，熙熙攘攘的澀谷大街上忽然間變得空無一人，就在三個夥伴面面相覷之際，遊戲開始了，被迫參加遊戲的三人漸漸意識到，他們被拉到了一個弱肉強食的恐怖異世界之中，在這裏，只有不斷的參加主辦者設置的，充滿了死亡危險的遊戲，才能夠獲得繼續活下去的機會。
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img th:src="@{/images/babylon.jpg}">
+                    <div>
+                        <h4>巴比倫 Babylon</h4>
+                        <div class="f14">劇情 喜劇 歷史</div>
+                        <div class="w-50 f12 pt-1">
+                            本片聚焦於一對男女主角的事業與情感，並追隨了這一時期其他三位虛構角色的起起落落；他們都有各自的歷史原型。
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img th:src="@{/images/glass-onion.jpg}">
+                    <div>
+                        <h4>利刃出鞘2 Glass Onion: A Knives Out Mystery</h4>
+                        <div class="f14">劇情 喜劇 懸疑 驚悚 犯罪</div>
+                        <div class="w-50 f12 pt-1">
+                            偵探貝努瓦·布蘭克將前往希臘，破解層層謎團，一眾形形色色的全新嫌疑人也將一一登場。
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img th:src="@{/images/m3gan.jpg}">
+                    <div>
+                        <h4>梅根 M3GAN</h4>
+                        <div class="f14">科幻 驚悚 恐怖</div>
+                        <div class="w-50 f12 pt-1">“她不只是個玩具，而是這個家的一份子。”</div>
+                    </div>
+                </div>
+                <div>
+                    <img th:src="@{/images/the-menu.jpg}">
+                    <div>
+                        <h4>菜單 The Menu</h4>
+                        <div class="f14">喜劇 驚悚 恐怖</div>
+                        <div class="w-50 f12 pt-1">
+                            一對年輕夫婦去一個偏遠島嶼上造訪一家餐廳，據說這家餐廳的廚師會為人提供驚喜的菜單。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="commons/commons :: .layui-footer"></div>
+</div>
+<script>
+    layui.use('carousel', function () {
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            , width: '100%' //设置容器宽度
+            , height: '100%'
+            , arrow: 'none' //始终显示箭头
+            , indicator: 'inside'
+        });
+    });
+</script>
+</body>
+</html>

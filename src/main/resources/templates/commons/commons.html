@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="commonhead">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    <title>基于SSM-电影后台管理系统</title>
+    <link media="all" rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/js/axios.min.js}"></script>
+    <script th:src="@{/js/jquery-1.8.2.min.js}"></script>
+</head>
+<body>
+<div class="layui-header">
+    <a th:href="@{/}">
+        <div class="layui-logo layui-hide-xs layui-bg-black">电影后台管理系统</div>
+    </a>
+    <!-- 头部区域（可配合layui 已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+        <!-- 移动端显示 -->
+        <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
+            <i class="layui-icon layui-icon-spread-left"></i>
+        </li>
+
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+            <a href="javascript:;">
+                <img class="layui-nav-img"
+                     src="https://xingqiu-tuchuang-1256524210.cos.ap-shanghai.myqcloud.com/5588/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20230202161539.jpg">
+                <span th:text="${session.userLoginState.userAccount}"></span>
+            </a>
+            <dl class="layui-nav-child">
+                <dd><a th:href="@{/user/login-out}"><i class="layui-icon layui-icon-logout"></i> 注销</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+
+<div class="layui-footer">
+    <!-- 底部固定区域 -->
+    <span class="layui-col-md-offset5">©2022 By Nanaue</span>
+</div>
+</body>
+</html>

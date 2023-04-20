@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/commons :: commonhead"></head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="commons/commons :: .layui-header"></div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">电影信息管理</a>
+                    <dl class="layui-nav-child layui-nav-itemed">
+                        <dd><a th:href="@{/film/film_info/1}">电影列表</a></dd>
+                        <dd class="layui-this"><a th:href="@{/film/toAddFilm}">新增电影</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">新闻管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/news/news_info/1}">新闻列表</a></dd>
+                        <dd><a th:href="@{/news/toAddNews}">新增新闻</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/user/toUpdate}">个人信息修改</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body">
+        <!--新增电影表单-->
+        <form class="layui-form" id="add-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label">电影名</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input filmName" lay-verify="required" name="filmName"
+                           placeholder="请输入电影名"
+                           required type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">导演</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input director" lay-verify="required" name="director"
+                           placeholder="请输入导演名(用 / 分割)"
+                           required type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">演员</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input actor" lay-verify="required" name="actor"
+                           placeholder="请输入演员(用 / 分割)"
+                           required type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">国家/地区</label>
+                <div class="layui-input-block">
+                    <select class="area" lay-verify="required" name="area">
+                        <option value=""></option>
+                        <option value="中国">中国</option>
+                        <option value="美国">美国</option>
+                        <option value="加拿大">加拿大</option>
+                        <option value="日本">日本</option>
+                        <option value="印度">印度</option>
+                        <option value="英国">英国</option>
+                        <option value="法国">法国</option>
+                        <option value="韩国">韩国</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电影类型</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input filmType" lay-verify="required" name="filmType"
+                           placeholder="请输入电影类型(用 / 分割)"
+                           required type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">请选择发行日期</label>
+                </div>
+                <div class="layui-inline">
+                    <input class="layui-input releaseDate" id="add-date" name="releaseDate" placeholder="请选择发行日期"
+                           type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn form-submit" lay-filter="form" lay-submit>立即提交</button>
+                    <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:replace="commons/commons :: .layui-footer"></div>
+</div>
+
+</body>
+<script th:inline="javascript">
+    window.onload = function () {
+        // layui.use('layer', function () {
+        //     var layer = layui.layer;
+        //
+        //     layer.msg('hello');
+        // });
+        // 表单中选择日期
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            //执行一个laydate实例
+            laydate.render({
+                elem: '#add-date' //指定元素
+            });
+        });
+        // 获取当前路径
+        var ctxPath = [[${#httpServletRequest.getScheme()}]] + '://' + [[${#httpServletRequest.getServerName()}]] + ':' + [[${#request.getServerPort()}]] +
+            [[${#httpServletRequest.getContextPath()}]];
+        // 表单提交
+        layui.use('form', function () {
+            var form = layui.form;
+            //监听提交
+            form.on('submit(formSubmit)', function (data) {
+                axios.post(ctxPath + "/film/update", data.field);
+                return false;
+            });
+        });
+
+
+        let formSubmit = document.querySelector(".form-submit");
+
+        formSubmit.onclick = function (e) {
+            e.preventDefault();
+            let film = {
+                releaseDate: document.querySelector('.releaseDate').value,
+                filmType: document.querySelector('.filmType').value,
+                area: document.querySelector('.area').value,
+                director: document.querySelector('.director').value,
+                filmName: document.querySelector('.filmName').value,
+                actor: document.querySelector('.actor').value,
+            };
+            console.log(film);
+            if (film.releaseDate.length < 1 || film.filmType.length < 1 || film.director.length < 1 || film.area.length < 1 || film.filmName.length < 1) {
+                return false;
+            }
+            axios({
+                    method: 'post',
+                    url: ctxPath + "/film/saveFilm",
+                    data: film,
+                }
+            ).then(response => {
+                // 设置请求后的处理逻辑
+                if (response.data === "电影保存成功") {
+                    // 如果保存成功则在2秒后刷新当前页
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        layer.msg(response.data);
+                    });
+                    setTimeout(() => {
+                        location.reload(true);
+                    }, 1000);
+                    return false;
+                }
+                // 如果保存失败则弹出失败信息
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg(response.data);
+                });
+                return false;
+            })
+        }
+
+    }
+</script>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/commons :: commonhead">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    table {
+        table-layout: fixed;
+    }
+
+    table tbody td {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+</style>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="commons/commons :: .layui-header"></div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">电影信息管理</a>
+                    <dl class="layui-nav-child layui-nav-itemed">
+                        <dd><a th:href="@{/film/film_info/1}">电影列表</a></dd>
+                        <dd><a th:href="@{/film/toAddFilm}">新增电影</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">新闻管理</a>
+                    <dl class="layui-nav-child">
+                        <dd class="layui-this"><a th:href="@{/news/news_info/1}">新闻列表</a></dd>
+                        <dd><a th:href="@{/news/toAddNews}">新增新闻</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/user/toUpdate}">个人信息修改</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" th:style="'display: block'">
+        <!--新闻列表-->
+        <table class="layui-table" lay-even>
+            <tr>
+                <th>新闻id</th>
+                <th>新闻标题</th>
+                <th>作者</th>
+                <th>内容</th>
+                <th>发布日期</th>
+                <th>操作</th>
+            </tr>
+            <tr th:each="news,rowState : ${records}">
+                <input name="id" th:value="${news.id}" type="hidden">
+                <td th:text="${rowState.count}"></td>
+                <td th:text="${news.title}"></td>
+                <td th:text="${news.author}"></td>
+                <td th:text="${news.content}"></td>
+                <td th:text="${news.releaseDate}"></td>
+                <td>
+                    <a th:href="@{'/news/toUpdate/'+${news.id}}">修改</a>
+                    <a href="javascript:;" id="delete-news">删除</a>
+                </td>
+            </tr>
+        </table>
+        <!--        相关分页的超链接-->
+        <div align="center">
+            <a th:href="@{/news/news_info/1}" th:if="${hasPrevious}">首页</a>
+            <a th:href="@{'/news/news_info/'+${current-1}}" th:if="${hasPrevious}">上一页</a>
+            <span th:each="num: ${navigation}">
+                                              <a style="color: #5FB878" th:href="@{'/news/news_info/'+${num}}"
+                                                 th:if="${current==num}"
+                                                 th:text="'【'+${num}+'】'"></a>
+                                                <a th:href="@{'/news/news_info/'+${num}}"
+                                                   th:if="${current!=num}"
+                                                   th:text="${num}"></a>
+                                                                                            </span>
+            <a th:href="@{'/news/news_info/'+${current+1}}" th:if="${hasNext}">下一页</a>
+            <a th:href="@{'/news/news_info/'+${pages}}" th:if="${hasNext}">尾页</a>
+        </div>
+    </div>
+    <div th:replace="commons/commons :: .layui-footer"></div>
+</div>
+<script th:inline="javascript">
+    var ctxPath = [[${#httpServletRequest.getScheme()}]] + '://' + [[${#httpServletRequest.getServerName()}]] + ':' + [[${#request.getServerPort()}]] +
+        [[${#httpServletRequest.getContextPath()}]];
+    var deleteNodes = document.querySelectorAll("#delete-news");
+    for (let i = 0; i < deleteNodes.length; i++) {
+        deleteNodes[i].onclick = function () {
+            var newsId = this.parentNode.parentNode.firstElementChild.value;
+            axios({
+                    method: 'get',
+                    url: ctxPath + "/news/delete",
+                    params: {
+                        newsId: newsId
+                    }
+                }
+            ).then(response => {
+                // 设置请求后的处理逻辑
+                if (response.data === "新闻删除成功") {
+                    // 如果保存成功则在2秒后刷新当前页
+                    layui.use('layer', function () {
+                        var layer = layui.layer;
+                        layer.msg(response.data);
+                    });
+                    setTimeout(() => {
+                        location.reload(true);
+                    }, 500);
+                    return false;
+                }
+                // 如果保存失败则弹出失败信息
+                layui.use('layer', function () {
+                    var layer = layui.layer;
+                    layer.msg(response.data);
+                });
+                return false;
+            })
+        }
+    }
+</script>
+</body>
+</html>

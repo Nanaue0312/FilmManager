@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <script th:src="@{/js/jquery-1.8.2.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/axios.min.js}"></script>
+    <script th:src="@{/js/vue.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <script th:inline="javascript">
+        $(function () {
+            $("#msg").html("");
+            // 用户账户正则表达式对象
+            var userAccountPatt = /^\w{4,12}$/;
+            // 用户密码表达式对象
+            var passwordPatt = /^\w{8,12}$/;
+            $(".login").click(function () {
+                //用户账户不能为空
+                //1 获取用户账户输入框里的内容
+                var userAccountText = $("#userAccount").val();
+                if (userAccountText === "") {
+                    $("#msg").text("用户账户不能为空");
+                    return false;
+                }
+                if (!userAccountPatt.test(userAccountText)) {
+                    //4 提示用户结果
+                    $("#msg").text("用户账户必须由字母，数字、下划线组成，并且长度为4到12位！");
+                    return false;
+                }
+                var userPasswordText = $("#userPassword").val();
+                if (userPasswordText === "") {
+                    $("#msg").text("密码不能为空")
+                    return false;
+                }
+                if (!passwordPatt.test(userPasswordText)) {
+                    //4 提示用户结果
+                    $("#msg").text("密码必须由字母，数字、下划线组成，并且长度为8到12位！");
+                    return false;
+                }
+            });
+            document.querySelector("#msg").innerHTML = [[${#httpServletRequest.getSession.getAttribute("msg")}]];
+        })
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="login-wrapper">
+        <div class="header">Login</div>
+        <div class="form-wrapper">
+            <form method="post" th:action="@{/user/login}">
+                <div id="msg" style="color: red" th:text="${session.msg}"></div>
+                <input @blur="checkUserAccount" class="input-item" id="userAccount" name="userAccount"
+                       placeholder="请输入用户账户"
+                       type="text">
+                <input class="input-item" id="userPassword" name="userPassword" placeholder="请输入密码"
+                       type="password">
+                <input class="login" id="login" type="submit" value="登录">
+            </form>
+        </div>
+        <div class="msg">
+            Don't have account?
+            <a th:href="@{/user/toRegister}">Register</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="commons/commons :: commonhead"></head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div th:replace="commons/commons :: .layui-header"></div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">电影信息管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/film/film_info/1}">电影列表</a></dd>
+                        <dd><a th:href="@{/film/toAddFilm}">新增电影</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">新闻管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a th:href="@{/news/news_info/1}">新闻列表</a></dd>
+                        <dd><a th:href="@{/news/toAddNews}">新增新闻</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a href="javascript:;">个人中心</a>
+                    <dl class="layui-nav-child ">
+                        <dd class="layui-this"><a th:href="@{/user/toUpdate}">个人信息修改</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--修改用户信息-->
+    <div class="layui-body">
+        <form class="layui-form" method="post" th:action="@{/user/update}">
+            <input name="id" th:value="${session.userLoginState.id}" type="hidden">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" lay-verify="required" name="username"
+                           placeholder="请输入用户名"
+                           required th:value="${session.userLoginState.username}"
+                           type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户账户</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" lay-verify="required" name="userAccount"
+                           placeholder="请输入用户账户"
+                           readonly="readonly"
+                           required th:value="${session.userLoginState.userAccount}"
+                           type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input name="gender" required th:checked="${session.userLoginState.gender} eq '0'?true:false"
+                           title="男" type="radio"
+                           value="0">
+                    <input name="gender" required th:checked="${session.userLoginState.gender} eq '1'?true:false"
+                           title="女" type="radio"
+                           value="1">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机号</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" lay-verify="required" name="phone"
+                           placeholder="请输入手机号"
+                           required th:value="${session.userLoginState.phone}"
+                           type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">电子邮箱</label>
+                <div class="layui-input-block">
+                    <input autocomplete="off" class="layui-input" lay-verify="required" name="email"
+                           placeholder="请输入电子邮箱"
+                           required th:value="${session.userLoginState.email}"
+                           type="text">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-filter="userUpdateForm" lay-submit>立即提交</button>
+                    <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:replace="commons/commons :: .layui-footer"></div>
+</div>
+</body>
+</html>
